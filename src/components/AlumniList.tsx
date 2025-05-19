@@ -1,43 +1,35 @@
 import type React from "react";
-import { FlatList, Linking, StyleSheet, View } from "react-native";
-import { Button, Card, Paragraph, Title } from "react-native-paper";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { Card, Paragraph, Title, useTheme } from "react-native-paper";
 import type { Alumni } from "../types/alumni";
 
 interface AlumniListProps {
 	data: Alumni[];
 	loading?: boolean;
+	onAlumniPress?: (alumni: Alumni) => void;
 }
 
-export const AlumniList: React.FC<AlumniListProps> = ({ data, loading }) => {
-	const handleCallPress = (phone: string) => {
-		Linking.openURL(`tel:${phone}`);
-	};
-
-	const handleEmailPress = (email: string) => {
-		Linking.openURL(`mailto:${email}`);
-	};
+export const AlumniList: React.FC<AlumniListProps> = ({
+	data,
+	loading,
+	onAlumniPress,
+}) => {
+	const theme = useTheme();
 
 	const renderItem = ({ item }: { item: Alumni }) => (
-		<Card style={styles.card}>
-			<Card.Content>
-				<Title>{item.nama}</Title>
-				<Paragraph>Program Studi: {item.prodi}</Paragraph>
-				<Paragraph>Departemen: {item.departemen}</Paragraph>
-				<Paragraph>Tahun Masuk: {item.tmasuk}</Paragraph>
-				<Paragraph>Tahun Lulus: {item.tlulus}</Paragraph>
-				<Paragraph>Jabatan: {item.jabatan}</Paragraph>
-				<Paragraph>Instansi: {item.instansi}</Paragraph>
-				<Paragraph>Alamat: {item.alamat}</Paragraph>
-			</Card.Content>
-			<Card.Actions>
-				{item.nowa && (
-					<Button onPress={() => handleCallPress(item.nowa)}>Telepon</Button>
-				)}
-				{item.email && (
-					<Button onPress={() => handleEmailPress(item.email)}>Email</Button>
-				)}
-			</Card.Actions>
-		</Card>
+		<Pressable onPress={() => onAlumniPress?.(item)}>
+			<Card style={styles.card}>
+				<Card.Content>
+					<Title>{item.nama}</Title>
+					<Paragraph>Program Studi: {item.prodi}</Paragraph>
+					<Paragraph>Tahun Masuk: {item.tmasuk}</Paragraph>
+					<Paragraph>Tahun Lulus: {item.tlulus}</Paragraph>
+					<View style={styles.divider} />
+					<Paragraph>Jabatan: {item.jabatan}</Paragraph>
+					<Paragraph>Instansi: {item.instansi}</Paragraph>
+				</Card.Content>
+			</Card>
+		</Pressable>
 	);
 
 	return (
@@ -62,5 +54,10 @@ const styles = StyleSheet.create({
 	},
 	listContent: {
 		paddingBottom: 16,
+	},
+	divider: {
+		height: 1,
+		backgroundColor: "#e0e0e0",
+		marginVertical: 8,
 	},
 });

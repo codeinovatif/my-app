@@ -23,6 +23,48 @@ export interface Alumni {
     occupation: string | null;
 }
 
+export interface Pager {
+    currentPage: number;
+    pageCount: number;
+    perPage: number;
+    total: number;
+}
+
 export interface AlumniResponse {
     alumni: Alumni[];
+    pager?: Pager;
+}
+
+export interface AlumniDetail {
+    alumni: Alumni;
+    S1?: {
+        universitas: string;
+        tmasuk: string;
+        tlulus: string;
+        prodi: string;
+    };
+    S2?: {
+        universitas: string;
+        tmasuk: string;
+        tlulus: string;
+        prodi: string;
+    };
+    S3?: {
+        universitas: string;
+        tmasuk: string;
+        tlulus: string;
+        prodi: string;
+    };
+}
+
+export interface FilterOption {
+    label: string;
+    value: string | number;
+}
+
+export interface FiltersResponse {
+    provinces: FilterOption[];
+    prodis: FilterOption[];
+    angkatan: FilterOption[];
+    occupations: FilterOption[];
 } 

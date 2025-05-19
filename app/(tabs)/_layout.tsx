@@ -4,7 +4,6 @@ import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
-import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
@@ -13,7 +12,7 @@ export default function TabLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+				tabBarActiveTintColor: colorScheme === "dark" ? "#fff" : "#1e88e5",
 				headerShown: true,
 				tabBarButton: HapticTab,
 				tabBarBackground: TabBarBackground,
@@ -29,13 +28,14 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="sarjana"
 				options={{
-					title: "Sarjana",
+					title: "Alumni Sarjana",
+					tabBarLabel: "Sarjana",
 				}}
 			/>
 			<Tabs.Screen
-				name="pasca"
+				name="detail"
 				options={{
-					title: "Pascasarjana",
+					href: null,
 				}}
 			/>
 		</Tabs>

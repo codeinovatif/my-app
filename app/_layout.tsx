@@ -1,29 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { useColorScheme } from "@/hooks/useColorScheme";
+import {
+	DarkTheme as NavigationDarkTheme,
+	DefaultTheme as NavigationDefaultTheme,
+} from "@react-navigation/native";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import {
+	MD3LightTheme as DefaultThemePaper,
+	PaperProvider,
+	adaptNavigationTheme,
+} from "react-native-paper";
+import "react-native-reanimated";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+	reactNavigationLight: NavigationDefaultTheme,
+	reactNavigationDark: NavigationDarkTheme,
+});
+
+const paperTheme = {
+	...DefaultThemePaper,
+	colors: {
+		...DefaultThemePaper.colors,
+		primary: "#1e88e5",
+		secondary: "#03a9f4",
+	},
+};
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+	const colorScheme = useColorScheme();
+	const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+	return (
+		<PaperProvider theme={paperTheme}>
+			<Stack
+				screenOptions={{
+					headerStyle: {
+						backgroundColor: theme.colors.background,
+					},
+					headerTintColor: theme.colors.text,
+					headerTitleStyle: {
+						color: theme.colors.text,
+					},
+				}}
+			>
+				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+				<Stack.Screen name="+not-found" />
+			</Stack>
+			<StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+		</PaperProvider>
+	);
 }
